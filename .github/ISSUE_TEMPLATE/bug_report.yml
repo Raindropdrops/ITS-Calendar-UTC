@@ -1,0 +1,47 @@
+name: Báo lỗi ITS Calendar
+description: Báo lỗi quét lịch, cài đặt hoặc file đầu ra
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã báo lỗi. Không đăng mật khẩu, cookie, token hoặc ảnh chứa dữ liệu nhạy cảm.
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Trình duyệt
+      options:
+        - Google Chrome
+        - Microsoft Edge
+        - Trình duyệt Chromium khác
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Phiên bản ITS Calendar
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Mô tả lỗi
+      description: Bạn đã làm gì, mong đợi điều gì và thực tế xảy ra điều gì?
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Ảnh chụp hoặc thông báo lỗi
+      description: Hãy che thông tin cá nhân trước khi gửi.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Xác nhận
+      options:
+        - label: Tôi đã tải lại QLĐT và thử chạy lại extension.
+          required: true
+        - label: Nội dung gửi lên không chứa mật khẩu, cookie hoặc token.
+          required: true

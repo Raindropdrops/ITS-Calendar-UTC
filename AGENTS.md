@@ -9,6 +9,7 @@
 - `src/scanner`: tự quét toàn học kỳ, có khoảng dự phòng và giới hạn an toàn.
 - `src/exporters`: CSV Google Calendar, ICS và JSON.
 - `src/snapshots`: so sánh lần quét mới với lần trước.
+- `extension`: extension Chrome/Edge chạy ngay trên tab QLĐT đã đăng nhập; không sao chép cookie hoặc mật khẩu.
 
 ## Nguyên tắc bắt buộc
 

@@ -21,7 +21,9 @@ const event: AcademicCalendarEvent = {
 describe("calendar exporters", () => {
   it("escapes CSV commas, quotes and newlines", () => {
     expect(csvEscape('A, "B"\nC')).toBe('"A, ""B""\nC"');
-    expect(toGoogleCsv([event], true).content).toContain('"Cơ khí, ô tô"');
+    const csv = toGoogleCsv([event], true).content;
+    expect(csv).toContain('"Cơ khí, ô tô"');
+    expect(csv).toContain("Phòng học: 402-A2");
   });
 
   it("escapes and folds ICS", () => {
@@ -31,6 +33,7 @@ describe("calendar exporters", () => {
     const ics = toIcs([event], true).content;
     expect(ics).toContain("TZID:Asia/Ho_Chi_Minh");
     expect(ics).toContain("CLASS:PRIVATE");
+    expect(ics).toContain("Phòng học: 402-A2");
     expect(ics.endsWith("\r\n")).toBe(true);
   });
 

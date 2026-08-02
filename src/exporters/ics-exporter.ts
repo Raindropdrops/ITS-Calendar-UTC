@@ -36,8 +36,10 @@ function eventTitle(event: AcademicCalendarEvent): string {
 }
 
 function eventDescription(event: AcademicCalendarEvent): string {
+  const room = event.room ?? event.location;
   return [
     event.classCode ? `Mã lớp: ${event.classCode}` : undefined,
+    room ? `Phòng học: ${room}` : undefined,
     event.startPeriod ? `Tiết: ${event.startPeriod}${event.endPeriod ? `-${event.endPeriod}` : ""}` : undefined,
     event.studyMode ? `Hình thức học: ${event.studyMode}` : undefined,
     event.instructor ? `Giảng viên: ${event.instructor}` : undefined,

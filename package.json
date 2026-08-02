@@ -1,9 +1,15 @@
 {
   "name": "utc-timetable-exporter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Xuất lịch học và lịch thi từ cổng QLĐT UTC sang Google Calendar.",
+  "description": "ITS Calendar — xuất lịch học và lịch thi từ cổng QLĐT UTC sang Google Calendar.",
+  "author": "Đức Anh — Intelligent Transport Systems K65",
+  "homepage": "https://github.com/Raindropdrops/ITS-Calendar-UTC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Raindropdrops/ITS-Calendar-UTC.git"
+  },
   "engines": {
     "node": ">=22"
   },
@@ -13,12 +19,15 @@
     "export": "tsx src/cli.ts export",
     "logout": "tsx src/cli.ts logout",
     "build": "tsc -p tsconfig.json",
+    "build:extension": "node scripts/build-extension.mjs",
+    "smoke:extension": "npm run build:extension && node scripts/smoke-extension.mjs",
+    "typecheck:extension": "tsc -p extension/tsconfig.json --noEmit",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "check": "npm run lint && npm run typecheck && npm run typecheck:extension && npm run test && npm run build && npm run build:extension"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.4",
@@ -29,10 +38,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
+    "@types/chrome": "^0.2.5",
+    "@types/jsdom": "^28.0.3",
     "@types/luxon": "^3.7.1",
     "@types/node": "^24.3.0",
+    "archiver": "^8.0.0",
+    "esbuild": "^0.28.1",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^29.1.1",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
