@@ -26,7 +26,7 @@ Các file CSV, ICS và JSON chỉ được tạo trong thư mục tải xuống 
 
 ## Liên hệ
 
-Tác giả: **Đức Anh — Intelligent Transport Systems K65**  
+Tác giả: **Đức Anh — Intelligent Transport Systems K65**<br>
 GitHub: <https://github.com/Raindropdrops/ITS-Calendar-UTC>
 
 ITS Calendar là dự án cộng đồng và không phải sản phẩm chính thức của Trường Đại học Giao thông Vận tải.
