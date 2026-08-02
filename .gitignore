@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.vscode/
+.env
+.data/browser-profile*/
+.data/auth/
+.data/snapshots/
+artifacts/discovery/
+artifacts/failures/
+output/*
+!output/.gitkeep
+credentials.json
+token.json
+*.log
+playwright-report/
+test-results/

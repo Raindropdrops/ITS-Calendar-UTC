@@ -1,0 +1,42 @@
+{
+  "name": "utc-timetable-exporter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Xuất lịch học và lịch thi từ cổng QLĐT UTC sang Google Calendar.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "cli": "tsx src/cli.ts",
+    "discover": "tsx src/cli.ts discover",
+    "export": "tsx src/cli.ts export",
+    "logout": "tsx src/cli.ts logout",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.8.4",
+    "cheerio": "^1.1.2",
+    "luxon": "^3.7.2",
+    "playwright": "^1.54.2",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^24.3.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.41.0",
+    "vitest": "^3.2.4"
+  }
+}
