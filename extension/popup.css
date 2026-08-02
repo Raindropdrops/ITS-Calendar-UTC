@@ -30,7 +30,7 @@ button, input { font: inherit; }
 
 .masthead {
   display: grid;
-  grid-template-columns: 30px 1fr auto;
+  grid-template-columns: 52px 1fr auto;
   gap: 12px;
   align-items: start;
   margin-bottom: 18px;
@@ -62,28 +62,16 @@ h1 {
   font-weight: 700;
 }
 
-.route-mark { position: relative; height: 59px; }
-.route-mark::before {
-  content: "";
-  position: absolute;
-  top: 5px;
-  bottom: 5px;
-  left: 11px;
-  width: 2px;
-  background: var(--blue);
+.brand-logo {
+  width: 50px;
+  height: 50px;
+  padding: 2px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  box-shadow: 0 5px 14px rgba(18, 33, 63, .08);
 }
-.route-mark span {
-  position: absolute;
-  left: 6px;
-  width: 12px;
-  height: 12px;
-  border: 3px solid var(--blue);
-  border-radius: 50%;
-  background: var(--paper);
-}
-.route-mark span:nth-child(1) { top: 0; }
-.route-mark span:nth-child(2) { top: 23px; border-color: var(--amber); }
-.route-mark span:nth-child(3) { bottom: 0; }
 
 .status-card {
   padding: 16px;
@@ -171,4 +159,5 @@ h1 {
 .primary-button svg { width: 19px; fill: none; stroke: currentColor; stroke-width: 2; }
 .stop-button { margin-top: 8px; padding: 9px; color: var(--red); background: transparent; border: 1px solid #e8bcbc; }
 button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid rgba(44, 94, 215, .28); outline-offset: 2px; }
-.privacy-note { margin: 11px 8px 0; color: var(--muted); text-align: center; font-size: 9px; line-height: 1.45; }
+.credit { margin: 12px 4px 0; color: var(--navy); text-align: center; font-size: 9px; letter-spacing: .015em; }
+.privacy-note { margin: 4px 8px 0; color: var(--muted); text-align: center; font-size: 8.5px; line-height: 1.45; }

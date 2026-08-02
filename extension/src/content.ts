@@ -166,9 +166,9 @@ async function scanExamPage(): Promise<CalendarEvent[]> {
 async function downloadOutputs(events: CalendarEvent[], courses: CourseWithoutDetail[], options: ScanOptions): Promise<void> {
   const included = options.includeUnknown ? events : events.filter((event) => event.eventType !== "unknown");
   const files: Array<{ filename: string; mimeType: string; content: string }> = [];
-  if (options.outputCsv) files.push({ filename: "UTC-Calendar/utc_full_academic_calendar_google.csv", mimeType: "text/csv", content: toGoogleCsv(included, options.privateEvents) });
-  if (options.outputIcs) files.push({ filename: "UTC-Calendar/utc_full_academic_calendar.ics", mimeType: "text/calendar", content: await toIcs(included, options.privateEvents) });
-  if (options.outputJson) files.push({ filename: "UTC-Calendar/utc_full_academic_calendar.normalized.json", mimeType: "application/json", content: JSON.stringify({ exportedAt: new Date().toISOString(), timezone: "Asia/Ho_Chi_Minh", events, coursesWithoutDetail: courses }, null, 2) });
+  if (options.outputCsv) files.push({ filename: "ITS-Calendar/utc_full_academic_calendar_google.csv", mimeType: "text/csv", content: toGoogleCsv(included, options.privateEvents) });
+  if (options.outputIcs) files.push({ filename: "ITS-Calendar/utc_full_academic_calendar.ics", mimeType: "text/calendar", content: await toIcs(included, options.privateEvents) });
+  if (options.outputJson) files.push({ filename: "ITS-Calendar/utc_full_academic_calendar.normalized.json", mimeType: "application/json", content: JSON.stringify({ product: "ITS Calendar", createdBy: "Đức Anh — Intelligent Transport Systems K65", exportedAt: new Date().toISOString(), timezone: "Asia/Ho_Chi_Minh", events, coursesWithoutDetail: courses }, null, 2) });
   if (files.length === 0) throw new Error("Hãy chọn ít nhất một định dạng file.");
   const response: { ok: boolean; error?: string } = await chrome.runtime.sendMessage({ type: "DOWNLOAD_FILES", files });
   if (!response?.ok) throw new Error(response?.error ?? "Trình duyệt không thể tải file.");
@@ -242,7 +242,7 @@ async function runScan(options: ScanOptions): Promise<void> {
     await downloadOutputs(events, courses, options);
     const studyCount = events.filter((event) => event.eventType === "study").length;
     const examCount = events.filter((event) => event.eventType === "exam").length;
-    await setStatus({ phase: "done", title: "Đã tạo lịch", message: "Các file nằm trong thư mục Tải xuống/UTC-Calendar.", scannedWeeks, eventCount: events.length, studyCount, examCount, percent: 100 });
+    await setStatus({ phase: "done", title: "Đã tạo lịch", message: "Các file nằm trong thư mục Tải xuống/ITS-Calendar.", scannedWeeks, eventCount: events.length, studyCount, examCount, percent: 100 });
   } catch (error) {
     await setStatus({ phase: "error", title: "Chưa thể hoàn tất", message: error instanceof Error ? error.message : String(error), scannedWeeks, eventCount: deduplicateEvents(allEvents).length });
   } finally {

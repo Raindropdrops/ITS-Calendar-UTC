@@ -23,16 +23,17 @@ await build({
   format: "esm",
   platform: "browser",
   target: ["chrome111", "edge111"],
-  minify: false,
+  minify: true,
   sourcemap: false,
 });
 
 for (const file of ["manifest.json", "popup.html", "popup.css"]) {
   await cp(path.join(root, "extension", file), path.join(output, file));
 }
+await cp(path.join(root, "extension", "assets"), path.join(output, "assets"), { recursive: true });
 
 const manifest = JSON.parse(await readFile(path.join(root, "extension", "manifest.json"), "utf8"));
-const zipPath = path.join(root, "dist", `utc-calendar-extension-v${manifest.version}.zip`);
+const zipPath = path.join(root, "dist", `its-calendar-v${manifest.version}.zip`);
 await rm(zipPath, { force: true });
 await new Promise((resolve, reject) => {
   const stream = createWriteStream(zipPath);

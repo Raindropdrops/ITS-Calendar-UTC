@@ -25,6 +25,22 @@ try {
   const popup = await context.newPage();
   await popup.goto(`chrome-extension://${extensionId}/popup.html`);
   await popup.setViewportSize({ width: 390, height: 650 });
+  await popup.evaluate(async () => {
+    await chrome.storage.local.set({
+      utcCalendarExporterStatus: {
+        phase: "done",
+        title: "Đã tạo lịch",
+        message: "Các file nằm trong thư mục Tải xuống/ITS-Calendar.",
+        scannedWeeks: 25,
+        eventCount: 208,
+        studyCount: 208,
+        examCount: 0,
+        percent: 100,
+        updatedAt: new Date().toISOString(),
+      },
+    });
+  });
+  await popup.reload();
   const health = await popup.evaluate(async () => {
     const tabs = await chrome.tabs.query({ url: "https://qldt.utc.edu.vn/*" });
     const tab = tabs.find((candidate) => candidate.id);

@@ -1,9 +1,15 @@
 {
   "name": "utc-timetable-exporter",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Xuất lịch học và lịch thi từ cổng QLĐT UTC sang Google Calendar.",
+  "description": "ITS Calendar — xuất lịch học và lịch thi từ cổng QLĐT UTC sang Google Calendar.",
+  "author": "Đức Anh — Intelligent Transport Systems K65",
+  "homepage": "https://github.com/Raindropdrops/ITS-Calendar-UTC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Raindropdrops/ITS-Calendar-UTC.git"
+  },
   "engines": {
     "node": ">=22"
   },
