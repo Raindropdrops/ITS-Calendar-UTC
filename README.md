@@ -1,5 +1,54 @@
 # UTC Timetable Exporter
 
+## Extension Chrome/Edge — cách dùng khuyên dùng
+
+Extension chạy ngay trên tab QLĐT mà bạn đã đăng nhập. Người dùng thông thường không cần cài Node.js, không cần mở PowerShell và không cần cung cấp mật khẩu cho extension.
+
+### Cài bản đóng gói
+
+1. Tải file `utc-calendar-extension-v0.2.0.zip` từ trang Releases của dự án rồi giải nén.
+2. Mở `chrome://extensions` trên Chrome hoặc `edge://extensions` trên Edge.
+3. Bật **Chế độ dành cho nhà phát triển**.
+4. Chọn **Tải tiện ích đã giải nén** và chọn thư mục vừa giải nén.
+5. Ghim **UTC Calendar Exporter** lên thanh công cụ.
+
+Trong giai đoạn thử nghiệm, extension được cài theo cách trên. Sau khi kiểm chứng với nhiều tài khoản QLĐT, dự án có thể phát hành qua Chrome Web Store và Microsoft Edge Add-ons để cài bằng một nút.
+
+### Xuất lịch bằng extension
+
+1. Đăng nhập tại `https://qldt.utc.edu.vn` bằng tab Chrome/Edge bình thường.
+2. Mở **Tra cứu lịch → Lịch học**.
+3. Bấm biểu tượng **UTC Calendar Exporter**.
+4. Chọn CSV, ICS hoặc JSON rồi bấm **Quét toàn bộ học kỳ**.
+5. Có thể đóng popup trong lúc quét. Mở lại popup để xem tiến trình.
+6. Khi hoàn thành, file nằm trong `Tải xuống/UTC-Calendar`.
+
+Extension tự quét toàn bộ trang Lịch học trước, chuyển tuần và chuyển tháng, giữ các lớp thực tập không có giờ chi tiết trong JSON, sau đó đối chiếu thêm trang Lịch thi. Phòng học được ghi vào cả trường Location và phần mô tả sự kiện.
+
+Extension chỉ yêu cầu quyền trên `https://qldt.utc.edu.vn/*`, quyền lưu trạng thái tiến trình và quyền tải file. Dữ liệu lịch được xử lý trong trình duyệt; mật khẩu và cookie không được đọc, sao chép hoặc gửi tới máy chủ của dự án.
+
+### Build extension từ source
+
+```powershell
+npm install
+npm run build:extension
+```
+
+Kết quả:
+
+```text
+dist/extension/
+dist/utc-calendar-extension-v0.2.0.zip
+```
+
+Kiểm tra nhanh popup và việc content script được nạp:
+
+```powershell
+npm run smoke:extension
+```
+
+Phần CLI/Playwright cũ vẫn được giữ bên dưới làm công cụ discovery, chẩn đoán khi website thay đổi và phương án dự phòng.
+
 Công cụ mở cổng QLĐT Trường Đại học Giao thông Vận tải trong Chromium, để bạn tự đăng nhập, sau đó đọc lịch học và lịch thi rồi xuất sang Google Calendar. Mật khẩu không đi qua terminal hay source code. Phiên đăng nhập được giữ trong một browser profile riêng tại `.data/browser-profile/`.
 
 ## Tính năng hiện có

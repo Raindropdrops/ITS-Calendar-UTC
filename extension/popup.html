@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UTC Calendar Exporter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <div class="route-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div>
+          <p class="eyebrow">QLĐT · UTC</p>
+          <h1>Mang lịch học<br />vào Calendar</h1>
+        </div>
+        <span class="version">v0.2</span>
+      </header>
+
+      <section class="status-card" aria-live="polite">
+        <div class="status-heading">
+          <span id="statusDot" class="status-dot"></span>
+          <div>
+            <p id="statusTitle" class="status-title">Sẵn sàng quét</p>
+            <p id="statusMessage" class="status-message">Mở trang Lịch học sau khi đăng nhập QLĐT.</p>
+          </div>
+        </div>
+        <div id="progressWrap" class="progress-wrap" hidden>
+          <div class="progress-track"><span id="progressBar"></span></div>
+          <div class="progress-meta">
+            <span id="weekLabel">Đang chuẩn bị…</span>
+            <span id="eventCount">0 sự kiện</span>
+          </div>
+        </div>
+        <div id="summary" class="summary" hidden>
+          <div><strong id="summaryWeeks">0</strong><span>tuần</span></div>
+          <div><strong id="summaryStudy">0</strong><span>lịch học</span></div>
+          <div><strong id="summaryExam">0</strong><span>lịch thi</span></div>
+        </div>
+      </section>
+
+      <section class="options" aria-labelledby="optionsTitle">
+        <div class="section-title">
+          <h2 id="optionsTitle">File sẽ nhận</h2>
+          <span>Tự động tải khi quét xong</span>
+        </div>
+        <label class="option-row">
+          <span class="file-badge csv">CSV</span>
+          <span><b>Google Calendar CSV</b><small>Dễ kiểm tra bằng Excel</small></span>
+          <input id="outputCsv" type="checkbox" checked />
+        </label>
+        <label class="option-row">
+          <span class="file-badge ics">ICS</span>
+          <span><b>Lịch chuẩn ICS</b><small>Giữ timezone và địa điểm</small></span>
+          <input id="outputIcs" type="checkbox" checked />
+        </label>
+        <label class="option-row">
+          <span class="file-badge json">{ }</span>
+          <span><b>Dữ liệu JSON</b><small>Dùng để đối chiếu</small></span>
+          <input id="outputJson" type="checkbox" checked />
+        </label>
+      </section>
+
+      <details class="advanced">
+        <summary>Tùy chọn lịch</summary>
+        <label><input id="privateEvents" type="checkbox" checked /> Đặt sự kiện ở chế độ riêng tư</label>
+        <label><input id="includeUnknown" type="checkbox" /> Đưa sự kiện chưa phân loại vào file lịch</label>
+      </details>
+
+      <button id="startButton" class="primary-button" type="button">
+        <span>Quét toàn bộ học kỳ</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" /></svg>
+      </button>
+      <button id="stopButton" class="stop-button" type="button" hidden>Dừng sau tuần hiện tại</button>
+
+      <p class="privacy-note">Chỉ đọc tab QLĐT đang mở. Extension không đọc hoặc lưu mật khẩu.</p>
+    </main>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
