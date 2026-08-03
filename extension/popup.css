@@ -133,6 +133,16 @@ h1 {
 .file-badge.csv { color: #226847; background: #dff4e9; }
 .file-badge.ics { color: #284f9f; background: #e2eaff; }
 .file-badge.json { color: #8a5a08; background: #fff0cf; }
+.import-warning {
+  margin: 9px 0 0;
+  padding: 8px 10px;
+  border: 1px solid #f0d392;
+  border-radius: 8px;
+  color: #76500a;
+  background: #fff8e8;
+  font-size: 10px;
+  line-height: 1.4;
+}
 
 .advanced { margin: 10px 0 14px; color: var(--muted); font-size: 11px; }
 .advanced summary { padding: 6px 0; color: var(--ink); cursor: pointer; font-weight: 650; }

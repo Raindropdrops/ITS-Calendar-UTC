@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
-import { deduplicateEvents, extractDomCourses, extractDomEvents, extractStateEvents, parseVietnameseDate, toGoogleCsv } from "../extension/src/core.js";
+import { calendarUidIdentity, deduplicateEvents, extractDomCourses, extractDomEvents, extractStateEvents, parseVietnameseDate, toGoogleCsv, toIcs } from "../extension/src/core.js";
 
 describe("extension core", () => {
   it("đọc card QLĐT và giữ phòng học trong Location lẫn ghi chú CSV", () => {
@@ -29,6 +29,23 @@ describe("extension core", () => {
   it("đọc page state và loại trùng DOM/network", () => {
     const event = extractStateEvents({ events: [{ TENHOCPHAN: "PLC", NGAYHOC: "18/08/2026", GIOBATDAU: 9, PHUTBATDAU: 35, GIOKETTHUC: 12, PHUTKETTHUC: 0, TENPHONGHOC: "402-A2", MALOP: "PLC-N01" }], courses: [] }, "")[0]!;
     expect(deduplicateEvents([event, { ...event, sourceExtractor: "dom" }])).toHaveLength(1);
+  });
+
+  it("loại bản sao page-state có thẻ br và DOM có mã lớp sạch", () => {
+    const pageState = extractStateEvents({ events: [{ TENHOCPHAN: "Tiếng Anh chuyên ngành", NGAYHOC: "10/08/2026", GIOBATDAU: 13, PHUTBATDAU: 0, GIOKETTHUC: 15, PHUTKETTHUC: 25, TENPHONGHOC: "302-A2", MALOP: "Tiếng Anh chuyên ngành-1-1-26(N17)<br><br>" }], courses: [] }, "")[0]!;
+    const domEvent = { ...pageState, sourceExtractor: "dom" as const, classCode: "Tiếng Anh chuyên ngành-1-1-26(N17)" };
+    const result = deduplicateEvents([pageState, domEvent]);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({ sourceExtractor: "page-state", classCode: "Tiếng Anh chuyên ngành-1-1-26(N17)", room: "302-A2" });
+  });
+
+  it("giữ UID ổn định khi bổ sung hoặc sửa phòng học", async () => {
+    const event = extractStateEvents({ events: [{ TENHOCPHAN: "PLC", NGAYHOC: "18/08/2026", GIOBATDAU: 9, PHUTBATDAU: 35, GIOKETTHUC: 12, PHUTKETTHUC: 0, MALOP: "PLC-N01" }], courses: [] }, "")[0]!;
+    expect(calendarUidIdentity(event)).toBe(calendarUidIdentity({ ...event, room: "402-A2" }));
+    const withoutRoom = await toIcs([event], true);
+    const withRoom = await toIcs([{ ...event, room: "402-A2" }], true);
+    expect(withoutRoom.match(/UID:(.+)/)?.[1]).toBe(withRoom.match(/UID:(.+)/)?.[1]);
+    expect(withRoom).toContain("LOCATION:402-A2");
   });
 
   it("không nhận ngày không hợp lệ", () => {

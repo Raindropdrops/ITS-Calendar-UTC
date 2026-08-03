@@ -1,6 +1,6 @@
 {
   "name": "utc-timetable-exporter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "ITS Calendar — xuất lịch học và lịch thi từ cổng QLĐT UTC sang Google Calendar.",

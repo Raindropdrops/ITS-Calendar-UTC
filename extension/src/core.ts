@@ -2,7 +2,13 @@ import type { CalendarEvent, CourseWithoutDetail, PageStateSnapshot } from "./ty
 
 const textValue = (value: unknown): string | undefined => {
   if (typeof value !== "string" && typeof value !== "number") return undefined;
-  const clean = String(value).normalize("NFC").replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim();
+  const clean = String(value)
+    .normalize("NFC")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\u00a0/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   return clean || undefined;
 };
 
@@ -172,11 +178,31 @@ export function extractExamTableEvents(doc: Document): CalendarEvent[] {
 }
 
 function identityText(value?: string): string {
-  return (value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("vi-VN").replace(/^phong\s+/, "").replace(/\s+/g, " ").trim();
+  return (value ?? "")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("vi-VN")
+    .replace(/^phong\s+/, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export function eventIdentity(event: CalendarEvent): string {
   return [event.eventType, event.date, event.startTime ?? "", event.endTime ?? "", identityText(event.subject), identityText(event.room), identityText(event.classCode)].join("|");
+}
+
+/**
+ * Calendar UID intentionally ignores the room. A room is event metadata that may
+ * be added or corrected after the first export; changing it must not create a
+ * second event when an ICS file is imported again.
+ *
+ * Keep the empty room slot for compatibility with files exported before room
+ * extraction was introduced.
+ */
+export function calendarUidIdentity(event: CalendarEvent): string {
+  return [event.eventType, event.date, event.startTime ?? "", event.endTime ?? "", identityText(event.subject), "", identityText(event.classCode)].join("|");
 }
 
 function fuzzySame(a: CalendarEvent, b: CalendarEvent): boolean {
@@ -184,8 +210,13 @@ function fuzzySame(a: CalendarEvent, b: CalendarEvent): boolean {
   if (a.startTime && b.startTime && a.startTime !== b.startTime) return false;
   if (identityText(a.subject) !== identityText(b.subject)) return false;
   if (a.room && b.room && identityText(a.room) !== identityText(b.room)) return false;
-  if (a.classCode && b.classCode && identityText(a.classCode) !== identityText(b.classCode)) return false;
+  const sameExtractor = a.sourceExtractor === b.sourceExtractor && a.sourcePage === b.sourcePage;
+  if (sameExtractor && a.classCode && b.classCode && identityText(a.classCode) !== identityText(b.classCode)) return false;
   return true;
+}
+
+function sourcePriority(event: CalendarEvent): number {
+  return (event.sourceExtractor === "page-state" ? 20 : 10) + (event.sourcePage === "exam-calendar" ? 5 : 0);
 }
 
 export function deduplicateEvents(events: CalendarEvent[]): CalendarEvent[] {
@@ -195,15 +226,23 @@ export function deduplicateEvents(events: CalendarEvent[]): CalendarEvent[] {
     if (index < 0) unique.push(event);
     else {
       const current = unique[index]!;
+      const preferred = sourcePriority(current) >= sourcePriority(event) ? current : event;
+      const fallback = preferred === current ? event : current;
       unique[index] = {
-        ...current,
-        ...event,
-        sourceExtractor: current.sourceExtractor === "page-state" ? current.sourceExtractor : event.sourceExtractor,
-        sourcePage: current.sourcePage === "exam-calendar" ? current.sourcePage : event.sourcePage,
-        endTime: event.endTime ?? current.endTime,
-        room: event.room ?? current.room,
-        classCode: event.classCode ?? current.classCode,
-        examFormat: event.examFormat ?? current.examFormat,
+        ...fallback,
+        ...preferred,
+        endTime: preferred.endTime ?? fallback.endTime,
+        startPeriod: preferred.startPeriod ?? fallback.startPeriod,
+        endPeriod: preferred.endPeriod ?? fallback.endPeriod,
+        room: preferred.room ?? fallback.room,
+        classCode: preferred.classCode ?? fallback.classCode,
+        instructor: preferred.instructor ?? fallback.instructor,
+        studyMode: preferred.studyMode ?? fallback.studyMode,
+        examFormat: preferred.examFormat ?? fallback.examFormat,
+        examSession: preferred.examSession ?? fallback.examSession,
+        durationMinutes: preferred.durationMinutes ?? fallback.durationMinutes,
+        studentNumber: preferred.studentNumber ?? fallback.studentNumber,
+        note: preferred.note ?? fallback.note,
       };
     }
   }
@@ -298,7 +337,7 @@ export async function toIcs(events: CalendarEvent[], privateEvents: boolean): Pr
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
   for (const event of events) {
     if (!event.startTime || !event.endTime) continue;
-    const uid = await sha256(eventIdentity(event));
+    const uid = await sha256(calendarUidIdentity(event));
     const start = `${event.date.replace(/-/g, "")}T${event.startTime.replace(":", "")}00`;
     const end = `${event.date.replace(/-/g, "")}T${event.endTime.replace(":", "")}00`;
     lines.push("BEGIN:VEVENT", `UID:${uid}@utc-calendar-exporter.local`, `DTSTAMP:${stamp}`, `DTSTART;TZID=Asia/Ho_Chi_Minh:${start}`, `DTEND;TZID=Asia/Ho_Chi_Minh:${end}`, `SUMMARY:${escapeIcs(eventTitle(event))}`, `DESCRIPTION:${escapeIcs(eventDescription(event))}`, `LOCATION:${escapeIcs(event.room ?? "")}`, `CLASS:${privateEvents ? "PRIVATE" : "PUBLIC"}`, "END:VEVENT");

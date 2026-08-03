@@ -14,7 +14,7 @@
           <p class="eyebrow">ITS CALENDAR · UTC</p>
           <h1>Mang lịch học<br />vào Calendar</h1>
         </div>
-        <span class="version">v1.0</span>
+        <span class="version">v1.0.1</span>
       </header>
 
       <section class="status-card" aria-live="polite">
@@ -46,12 +46,12 @@
         </div>
         <label class="option-row">
           <span class="file-badge csv">CSV</span>
-          <span><b>Google Calendar CSV</b><small>Dễ kiểm tra bằng Excel</small></span>
-          <input id="outputCsv" type="checkbox" checked />
+          <span><b>CSV dự phòng</b><small>Dùng với Excel; không nhập cùng ICS</small></span>
+          <input id="outputCsv" type="checkbox" />
         </label>
         <label class="option-row">
           <span class="file-badge ics">ICS</span>
-          <span><b>Lịch chuẩn ICS</b><small>Giữ timezone và địa điểm</small></span>
+          <span><b>Lịch chuẩn ICS · Khuyên dùng</b><small>File duy nhất cần nhập vào Calendar</small></span>
           <input id="outputIcs" type="checkbox" checked />
         </label>
         <label class="option-row">
@@ -59,6 +59,7 @@
           <span><b>Dữ liệu JSON</b><small>Dùng để đối chiếu</small></span>
           <input id="outputJson" type="checkbox" checked />
         </label>
+        <p class="import-warning">Chỉ nhập <strong>một</strong> file lịch. Không nhập cả CSV và ICS vào cùng một Calendar.</p>
       </section>
 
       <details class="advanced">
