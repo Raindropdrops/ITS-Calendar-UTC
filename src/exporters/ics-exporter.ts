@@ -3,7 +3,7 @@ import path from "node:path";
 import { DateTime } from "luxon";
 import type { AcademicCalendarEvent } from "../models/academic-calendar-event.js";
 import { TIME_ZONE } from "../config.js";
-import { eventIdentityKey } from "../utils/deduplicate.js";
+import { calendarEventUidKey } from "../utils/deduplicate.js";
 import { ensureDir } from "../utils/filesystem.js";
 
 export function escapeIcsText(value: string): string {
@@ -77,7 +77,7 @@ export function toIcs(events: AcademicCalendarEvent[], privateEvents: boolean): 
     }
     lines.push(
       "BEGIN:VEVENT",
-      `UID:${eventIdentityKey(event)}@utc-timetable-exporter.local`,
+      `UID:${calendarEventUidKey(event)}@utc-timetable-exporter.local`,
       `DTSTAMP:${stamp}`,
       `DTSTART;TZID=Asia/Ho_Chi_Minh:${icsDateTime(event.date, event.startTime)}`,
       `DTEND;TZID=Asia/Ho_Chi_Minh:${icsDateTime(event.date, event.endTime)}`,

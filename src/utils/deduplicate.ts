@@ -15,6 +15,24 @@ export function eventIdentityKey(event: AcademicCalendarEvent): string {
   return createHash("sha256").update(raw, "utf8").digest("hex");
 }
 
+/**
+ * Stable UID for calendar exports. Room/location is deliberately excluded so
+ * enriching an existing event with a room does not turn it into a new event.
+ * The empty slot preserves compatibility with legacy exports that had no room.
+ */
+export function calendarEventUidKey(event: AcademicCalendarEvent): string {
+  const raw = [
+    event.eventType,
+    event.date,
+    event.startTime ?? "",
+    event.endTime ?? "",
+    normalizeIdentityText(event.subject),
+    "",
+    normalizeIdentityText(event.classCode),
+  ].join("|");
+  return createHash("sha256").update(raw, "utf8").digest("hex");
+}
+
 export function stableEventId(event: AcademicCalendarEvent): string {
   const raw = [
     event.eventType,

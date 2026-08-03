@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { AcademicCalendarEvent } from "../src/models/academic-calendar-event.js";
 import { csvEscape, toGoogleCsv } from "../src/exporters/google-csv-exporter.js";
 import { escapeIcsText, foldIcsLine, toIcs } from "../src/exporters/ics-exporter.js";
+import { calendarEventUidKey } from "../src/utils/deduplicate.js";
 
 const event: AcademicCalendarEvent = {
   eventType: "study",
@@ -41,5 +42,12 @@ describe("calendar exporters", () => {
     const result = toIcs([{ ...event, endTime: undefined }], true);
     expect(result.skipped).toBe(1);
     expect(result.content).not.toContain("BEGIN:VEVENT");
+  });
+
+  it("keeps the calendar UID when room metadata changes", () => {
+    expect(calendarEventUidKey(event)).toBe(calendarEventUidKey({ ...event, room: undefined, location: undefined }));
+    const before = toIcs([{ ...event, room: undefined }], true).content.match(/UID:(.+)/)?.[1];
+    const after = toIcs([event], true).content.match(/UID:(.+)/)?.[1];
+    expect(after).toBe(before);
   });
 });

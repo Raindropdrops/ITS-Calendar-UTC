@@ -3,7 +3,7 @@
   "name": "ITS Calendar — Lịch học UTC",
   "short_name": "ITS Calendar",
   "description": "Quét lịch học và lịch thi từ QLĐT UTC rồi xuất sang Google Calendar. Dự án cộng đồng bởi Đức Anh — ITS K65.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minimum_chrome_version": "111",
   "homepage_url": "https://github.com/Raindropdrops/ITS-Calendar-UTC",
   "icons": {

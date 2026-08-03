@@ -242,7 +242,7 @@ async function runScan(options: ScanOptions): Promise<void> {
     await downloadOutputs(events, courses, options);
     const studyCount = events.filter((event) => event.eventType === "study").length;
     const examCount = events.filter((event) => event.eventType === "exam").length;
-    await setStatus({ phase: "done", title: "Đã tạo lịch", message: "Các file nằm trong thư mục Tải xuống/ITS-Calendar.", scannedWeeks, eventCount: events.length, studyCount, examCount, percent: 100 });
+    await setStatus({ phase: "done", title: "Đã tạo lịch", message: "Hãy chỉ nhập file .ics vào Calendar; CSV là bản dự phòng, không nhập thêm.", scannedWeeks, eventCount: events.length, studyCount, examCount, percent: 100 });
   } catch (error) {
     await setStatus({ phase: "error", title: "Chưa thể hoàn tất", message: error instanceof Error ? error.message : String(error), scannedWeeks, eventCount: deduplicateEvents(allEvents).length });
   } finally {
